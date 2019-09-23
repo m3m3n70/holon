@@ -1,0 +1,162 @@
+
+[   
+    {
+    "constant": true,
+    "inputs": [],
+    "name": "dao",
+    "outputs": [
+        {
+        "name": "",
+        "type": "address"
+        }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+    },
+    {
+    "constant": true,
+    "inputs": [],
+    "name": "choiceType",
+    "outputs": [
+        {
+        "name": "",
+        "type": "address"
+        }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+    },
+    {
+    "constant": true,
+    "inputs": [],
+    "name": "daoToken",
+    "outputs": [
+        {
+        "name": "",
+        "type": "address"
+        }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+    },
+    {
+    "inputs": [
+        {
+        "name": "_dao",
+        "type": "address"
+        },
+        {
+        "name": "_daoToken",
+        "type": "address"
+        },
+        {
+        "name": "_approvalThreshold",
+        "type": "uint256"
+        },
+        {
+        "name": "_choiceType",
+        "type": "address"
+        }
+    ],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+    },
+    {
+    "anonymous": false,
+    "inputs": [
+        {
+        "indexed": true,
+        "name": "_voter",
+        "type": "address"
+        },
+        {
+        "indexed": false,
+        "name": "_vote",
+        "type": "uint256"
+        }
+    ],
+    "name": "voted",
+    "type": "event"
+    },
+    {
+    "anonymous": false,
+    "inputs": [
+        {
+        "indexed": false,
+        "name": "_status",
+        "type": "string"
+        }
+    ],
+    "name": "choiceApproved",
+    "type": "event"
+    },
+    {
+    "constant": true,
+    "inputs": [],
+    "name": "getAddress",
+    "outputs": [
+        {
+        "name": "",
+        "type": "address"
+        }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+    },
+    {
+    "constant": false,
+    "inputs": [
+        {
+        "name": "_voter",
+        "type": "address"
+        },
+        {
+        "name": "_vote",
+        "type": "uint256"
+        }
+    ],
+    "name": "vote",
+    "outputs": [
+        {
+        "name": "",
+        "type": "bool"
+        }
+    ],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+    },
+    {
+    "constant": true,
+    "inputs": [],
+    "name": "getVoteCount",
+    "outputs": [
+        {
+        "name": "",
+        "type": "uint256"
+        }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+    },
+    {
+    "constant": true,
+    "inputs": [],
+    "name": "getVoteStatus",
+    "outputs": [
+        {
+        "name": "",
+        "type": "string"
+        }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+    }
+]
