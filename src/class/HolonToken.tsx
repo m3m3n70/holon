@@ -26,32 +26,55 @@ export interface HolonTokenInterface {
 export class HolonToken implements HolonTokenInterface {
     private provider: Web3Provider;
     private holonTokenAddress: string;
-    private holonTokenInstance: HolonTokenType;
+    private holonToken: HolonTokenType;
     private tokenName: string;
     private tokenSymbol: string;
     private tokenCap: number;
     private tokenTotalSupply: number;
     private owner: string;
 
-    constructor(provider: () => Web3Provider) {
-        this.provider = provider();
+    constructor(_provider: Web3Provider, _holonTokenAddress: string) {
+        this.provider = _provider;
+        this.holonTokenAddress = _holonTokenAddress;
     }
 
-    public async initializeExistingToken(_holonTokenAddress: string) {
+    public async initializeExistingToken() {
         try {
-            this.holonTokenAddress = _holonTokenAddress;
-            this.holonTokenInstance = await new this.provider.eth.Contract(HolonTokenABI, this.holonTokenAddress);
-            this.tokenName = await this.holonTokenInstance.methods.name().call();
-            this.tokenSymbol = await this.holonTokenInstance.methods.symbol().call();
-            this.tokenCap = await this.holonTokenInstance.methods.cap().call();
-            this.tokenCap = Number(this.tokenCap);
-            this.tokenTotalSupply = await this.holonTokenInstance.methods.totalSupply().call();
-            this.tokenTotalSupply = Number(this.tokenTotalSupply);
-            this.owner = await this.holonTokenInstance.methods.owner().call();
-            return this.holonTokenInstance;
+            await this.setHolonToken();
+            await this.setName();
+            await this.setSymbol();
+            await this.setCap();
+            await this.setTotalSupply();
+            await this.setOwner();
         } catch (e) {
             console.error(e);
         }
+    }
+
+    private async setHolonToken() {
+        this.holonToken = await new this.provider.eth.Contract(HolonTokenABI, this.holonTokenAddress);
+    }
+
+    private async setName() {
+        this.tokenName = await this.holonToken.methods.name().call();
+    }
+
+    private async setSymbol() {
+        this.tokenSymbol = await this.holonToken.methods.symbol().call();
+    }
+
+    private async setCap() {
+        this.tokenCap = await this.holonToken.methods.cap().call();
+        this.tokenCap = Number(this.tokenCap);
+    }
+
+    private async setTotalSupply() {
+        this.tokenTotalSupply = await this.holonToken.methods.totalSupply().call();
+        this.tokenTotalSupply = Number(this.tokenTotalSupply);
+    }
+
+    private async setOwner() {
+        this.owner = await this.holonToken.methods.owner().call();
     }
 
     public getProvider() {
@@ -79,13 +102,13 @@ export class HolonToken implements HolonTokenInterface {
     }
 
     public async getBalanceOf(_address: string) {
-        let balance = await this.holonTokenInstance.methods.balanceOf(_address).call();
+        let balance = await this.holonToken.methods.balanceOf(_address).call();
         let strNumber = parseInt(balance);
         return strNumber;
     }
 
     public getOwner() {
-        this.holonTokenInstance.methods.owner().call();
+        this.holonToken.methods.owner().call();
         return this.owner;
     }
 }
