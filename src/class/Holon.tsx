@@ -3,59 +3,36 @@ import { HolonController } from "./HolonController";
 
 export interface HolonInterface {
     getProvider: () => Web3Provider;
-    getHolonName: () => string;
+    getHolonName: () => Promise<string>;
     getControllerAddress: () => string;
-    getHolonAddress: () => string;
-    getPrimaryTokenAddress: () => string;
+    getHolonAddress: () => Promise<string>;
+    getPrimaryTokenAddress: () => Promise<string>;
     getNeurons: () => Array<any>;
 }
 
 export class Holon implements HolonInterface {
-    private provider: Web3Provider;
-    private controllerAddress: string;
     private controller: HolonController;
     private holonAddress: string; 
     private holonName: string;
     private primaryTokenAddress: string;
 
-    constructor(_provider: Web3Provider, _controllerAddress: string) {
-        this.provider = _provider;
-        this.controllerAddress = _controllerAddress;
-    }
+    constructor(private controllerAddress: string, private provider: Web3Provider) {}
 
     public async initializeExistingHolon() {
         try {
-            await this.setController();
-            await this.setHolonAddress();
-            await this.setHolonName();
-            await this.setPrimaryTokenAddress();
+            this.controller = await new HolonController(this.controllerAddress, this.provider);
+            await this.controller.initializeHolonController();
         } catch (e) {
             console.error(e);
         }
-    }
-
-    private async setController() {
-        this.controller = await new HolonController(this.provider, this.controllerAddress);
-        await this.controller.initializeHolonController();
-    }
-
-    private async setHolonAddress() {
-        this.holonAddress = await this.controller.getHolonAddress();
-    }
-
-    private async setHolonName() {
-        this.holonName = await this.controller.getHolonName();
-    }
-
-    private async setPrimaryTokenAddress() {
-        this.primaryTokenAddress = await this.controller.getPrimaryTokenAddress();
     }
 
     public getProvider() {
         return this.provider;
     }
     
-    public getHolonName() {
+    public async getHolonName() {
+        this.holonName = await this.controller.getHolonName();
         return this.holonName;
     }   
 
@@ -63,20 +40,17 @@ export class Holon implements HolonInterface {
         return this.controllerAddress;
     }
 
-    public getHolonAddress() {
+    public async getHolonAddress() {
+        this.holonAddress = await this.controller.getHolonAddress();
         return this.holonAddress;
     }
 
-    public getPrimaryTokenAddress() {
+    public async getPrimaryTokenAddress() {
+        this.primaryTokenAddress = await this.controller.getPrimaryTokenAddress();
         return this.primaryTokenAddress;
     }
 
     public getNeurons() {
         return this.controller.getNeurons();
     }
-
-    // To Implement:
-    //   new Token
-    //   new Smart Token
-    //   update primaryToken
 }

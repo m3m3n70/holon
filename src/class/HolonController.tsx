@@ -18,86 +18,48 @@ export interface HolonType {
 }
 
 export interface HolonInterface {
-    getProvider: () => Web3Provider;
     getHolonName: () => string;
-    getControllerAddress: () => string;
-    getHolonAddress: () => string;
-    getPrimaryTokenAddress: () => string;
-    getNeurons: () => Array<any>;
+    getControllerAddress: () => Promise<string>;
+    getHolonAddress: () => Promise<string>;
+    getPrimaryTokenAddress: () => Promise<string>;
 }
 
 export class HolonController implements HolonInterface {
-    private provider: Web3Provider;
     private controller: HolonControllerType;
-    private controllerAddress: string;
     private holon: HolonType;
     private holonAddress: string; 
     private holonName: string;
     private primaryTokenAddress: string;
 
-    constructor(_provider: Web3Provider, _controllerAddress: string) {
-        this.provider = _provider;
-        this.controllerAddress = _controllerAddress
-    }
+    constructor(private controllerAddress: string, private provider: Web3Provider, ) {}
 
     public async initializeHolonController() {
         try {
-            await this.setHolonControllerInstance();
-            await this.setHolonAddress();
-            await this.setPrimaryTokenAddress();
-            await this.setControllerAddress();
-            await this.setHolonContract();
+            this.controller = await new this.provider.eth.Contract(HolonControllerABI, this.controllerAddress);
+            this.holonAddress = await this.controller.methods.dao().call();
+            this.holon = await new this.provider.eth.Contract(HolonABI, this.holonAddress);
+            this.holonName = await this.holon.methods.daoName().call();
         } catch (e) {
             console.error(e);
         }
     }
 
-    private async setHolonControllerInstance() {
-        this.controller = await new this.provider.eth.Contract(HolonControllerABI, this.controllerAddress);
-    }
-
-    private async setHolonAddress() {
-        this.holonAddress = await this.controller.methods.dao().call();
-    }
-
-    private async setPrimaryTokenAddress() {
-        this.primaryTokenAddress = await this.controller.methods.daoToken().call();
-    }
-
-    private async setControllerAddress() {
-        this.controllerAddress = this.controller._address;
-    }
-
-    private async setHolonContract() {
-        this.holon = await new this.provider.eth.Contract(HolonABI, this.holonAddress);
-        this.holonName = await this.holon.methods.daoName().call();
-    }
-
-    public getProvider() {
-        return this.provider;
-    }
-    
     public getHolonName() {
         return this.holonName;
     }   
 
-    public getControllerAddress() {
+    public async getControllerAddress() {
+        this.controllerAddress = this.controller._address;
         return this.controllerAddress;
     }
 
-    public getHolonAddress() {
+    public async getHolonAddress() {
         return this.holonAddress;
     }
 
-    public getPrimaryTokenAddress() {
+    public async getPrimaryTokenAddress() {
+        this.primaryTokenAddress = await this.controller.methods.daoToken().call();
         return this.primaryTokenAddress;
     }
 
-    public getNeurons() {
-        return this.controller.methods.getNeurons().call();
-    }
-
-    // To Implement:
-    // new token
-    // update default token
 }
