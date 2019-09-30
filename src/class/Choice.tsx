@@ -1,7 +1,7 @@
 import ChoiceABI from "../abi/Choice.json";
 import MintTokenChoiceABI from "../abi/MintTokenChoice.json";
 import MintTokenChoiceByteCode from "../abi/MintTokenChoiceByteCode.json";
-import { Web3Provider } from "./Web3Provider";
+import { Web3Provider, injectProvider } from "./Web3Provider";
 import { Holon } from "./Holon";
 import { HolonToken } from "./HolonToken";
 
@@ -52,11 +52,11 @@ export class Choice implements ChoiceInterface {
     private approvalThreshold: number;
     private voters: Array<any>;
 
-    constructor(_provider: () => Web3Provider, _holon: Holon) {
-        this.provider = _provider();
+    constructor(_provider: Web3Provider, _holon: Holon) {
+        this.provider = _provider;
         this.holon = _holon;
     }
-
+    
     public async initializeExistingChoice(_choiceAddress: string) {
         try {
             this.choiceAddress = _choiceAddress;

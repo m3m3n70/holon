@@ -1,10 +1,10 @@
 {
     "web3host": "http://localhost:8545",
-    "holonController": "0x7d14eD389A40e08BD29B6cD3a79e535046d3108e",
-    "holonToken": "0x8DA98e806387520404BA37779E3493588C204ba4",
-    "holonAddress": "0x54c0D085866Cb10bFE0d58d2792E04075f83c03f",
-    "mintTokenChoice": "0x1436418624D64Cd69c5bd839d4f993A7cCb227c6",
-    "choice": "0xfBfe5eBffff2661536795C38c7882235F3f3A631",
-    "beneficiary": "0xF885f0E9d06c1cAdc2BBD03A9F23df4A115bF32f",
-    "sender": "0x1896ac5BA976E5c507cEb4aCbF710A5654f074dA"
-}
+    "holonController": "0xf72c69f3fEF031f5B72f97388D123b92463ba82A",
+    "holonToken": "0xf356D5caDeD730C1D1b3862Fd98EC1BC73c2BC47",
+    "holonAddress": "0xF5c00B39C499b4a104Ef111d1963898d19d41B1C",
+    "mintTokenChoice": "0xf369E6E200a71D16dF1023f67FC69A112Ad41E8E",
+    "choice": "0x06169F1b5569817b89cb4Dc7F52E99Fb49965d24",
+    "beneficiary": "0x1630952d8Dd219dB14B850C24d459382130bf276",
+    "sender": "0x10E970D3D3186dB4c0f00b4661A8C0a48f9A5a8B"
+}ß

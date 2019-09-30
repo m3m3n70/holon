@@ -1,4 +1,4 @@
-import Web3 from "web3";
+import Web3 from "Web3";
 import config from "../config/config.json";
 
 export interface Web3Provider {
@@ -23,8 +23,8 @@ export class Provider implements ProviderInterface {
     private isConnected: boolean;
     public HttpProvider: Object;
 
-    constructor(provider: Web3Provider) {
-        this.provider = provider;
+    constructor(_provider: Web3Provider) {
+        this.provider = _provider;
     }
 
     public getProvider() {
@@ -44,7 +44,7 @@ export function injectProvider() {
     const providerAddress = config.web3host;
     const httpProvider = new Web3.providers.HttpProvider(providerAddress);
     const web3provider = new Web3(httpProvider);
-    const ethereumProvider = new Provider(web3provider);
-
-    return ethereumProvider.getProvider(); 
+    const ethProvider = new Provider(web3provider);
+    const provider = ethProvider.getProvider();
+    return provider;
 }

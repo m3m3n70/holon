@@ -5,10 +5,11 @@ import config from "../config/config.json";
 import { stat } from "fs";
 
 describe('Test methods with Initialize Existing Choice', () => {
-
-    let holon = new Holon(injectProvider);
-    holon.initializeExistingHolon(config.choice);
-    let choice = new Choice(injectProvider, holon);
+   
+    const provider = injectProvider();
+    let holon = new Holon(provider, config.holonController);
+    holon.initializeExistingHolon();
+    let choice = new Choice(provider, holon);
 
     test('Choice is created with a Provider', async () => {
         await choice.initializeExistingChoice(config.choice);
@@ -20,7 +21,6 @@ describe('Test methods with Initialize Existing Choice', () => {
         await choice.initializeExistingChoice(config.choice);
         let currentHolon = await choice.getHolon();
         expect(currentHolon).toHaveProperty("controllerAddress");
-        expect(currentHolon).toHaveProperty("holonControllerInstance");
     });
     
     test('Choice has a valid Token', async () => {
@@ -65,10 +65,10 @@ describe('Test methods with Initialize Existing Choice', () => {
         expect(choiceTypeAddress).toHaveLength(42);
     });
 
-    test('Vote', async () => {
-        await choice.initializeExistingChoice(config.choice);
-        let choiceVote = await choice.vote(config.sender, 10);
-        // expect(choiceVote).toThrowError();
-    });
+    // test('Vote', async () => {
+    //     await choice.initializeExistingChoice(config.choice);
+    //     let choiceVote = await choice.vote(config.sender, 10);
+    //     expect(choiceVote).toThrowError(); 
+    // });
 });
 

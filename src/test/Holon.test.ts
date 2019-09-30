@@ -1,5 +1,5 @@
+import { injectProvider } from "../class/Web3Provider";
 import { Holon } from "../class/Holon";
-import { injectProvider, Web3Provider } from "../class/Web3Provider";
 import config from "../config/config.json";
 
 expect.extend({
@@ -16,32 +16,33 @@ expect.extend({
 	}
 });
 
-//Test InitializeExistigHolon
-
-const holon = new Holon(injectProvider);
-
-test('Holon is initialized with a Provider', async () => {
-    let currentProvider = await holon.getProvider();
-    expect(currentProvider).toHaveProperty("eth");
-});
-
-test('Holon has a Controller Address', () => {
-  holon.initializeExistingHolon(config.holonController);
-  expect(holon.getControllerAddress()).toBeDefined;
-});
-
-test('Holon has a Holon Address', () => {
-    holon.initializeExistingHolon(config.holonController);
-    expect(holon.getHolonAddress()).toBeDefined;
-});
-
-test('Holon has a Primary Token Address', () => {
-    holon.initializeExistingHolon(config.holonController);
-    expect(holon.getPrimaryTokenAddress()).toBeDefined;
-});
-
-test('Holon.getNeurons() returns Array of Neurons', async () => {
-    await holon.initializeExistingHolon(config.holonController);
-    let neuronsArray = holon.getNeurons();
-    expect(Array.isArray(neuronsArray)).toBeDefined;
+describe('Test methods with existing Holon', () => {
+    const provider = injectProvider();
+    const holon = new Holon(provider, config.holonController);
+    
+    test('Holon is initialized with a Provider', async () => {
+        let currentProvider = await holon.getProvider();
+        expect(currentProvider).toHaveProperty("eth");
+    });
+    
+    test('Holon has a Controller Address', () => {
+      holon.initializeExistingHolon();
+      expect(holon.getControllerAddress()).toBeDefined;
+    });
+    
+    test('Holon has a Holon Address', () => {
+        holon.initializeExistingHolon();
+        expect(holon.getHolonAddress()).toBeDefined;
+    });
+    
+    test('Holon has a Primary Token Address', () => {
+        holon.initializeExistingHolon();
+        expect(holon.getPrimaryTokenAddress()).toBeDefined;
+    });
+    
+    test('Holon.getNeurons() returns Array of Neurons', async () => {
+        await holon.initializeExistingHolon();
+        let neuronsArray = holon.getNeurons();
+        expect(Array.isArray(neuronsArray)).toBeDefined;
+    });
 });
