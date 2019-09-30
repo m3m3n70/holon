@@ -28,7 +28,6 @@ export class HolonToken implements HolonTokenInterface {
     private tokenSymbol: string;
     private tokenCap: number;
     private tokenTotalSupply: number;
-    private owner: string;
 
     constructor(private holonTokenAddress: string, private provider: Web3Provider, ) {}
 
@@ -72,9 +71,4 @@ export class HolonToken implements HolonTokenInterface {
         return strNumber;
     }
 
-    public async getOwner() {
-        this.owner = await this.holonToken.methods.owner().call();
-        this.holonToken.methods.owner().call();
-        return this.owner;
-    }
 }
