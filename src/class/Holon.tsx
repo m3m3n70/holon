@@ -50,7 +50,4 @@ export class Holon implements HolonInterface {
         return this.primaryTokenAddress;
     }
 
-    public getNeurons() {
-        return this.controller.getNeurons();
-    }
 }
