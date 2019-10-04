@@ -7,7 +7,7 @@
       "noImplicitAny": false,
       "baseUrl": "src",
       "lib": ["es2018", "dom"],
-      "outDir": "./build"
+      "outDir": "./dist"
   },
   "include": [
     "./src"
