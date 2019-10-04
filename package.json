@@ -5,23 +5,18 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "tsc": "tsc",
-    "dev": "ts-node-dev --respawn --transpileOnly ./src/main.tsx",
+    "build": "tsc",
     "prod": "tsc && node ./build/app.js"
   },
   "author": "neo.wilder",
   "license": "ISC",
   "dependencies": {
-    "lodash": "^4.17.15",
-    "lodash.tonumber": "^4.0.3",
-    "react": "^16.9.0",
-    "ts-node-dev": "^1.0.0-pre.43",
-    "typings": "^2.1.1",
     "web3": "^1.2.1"
   },
   "devDependencies": {
     "@types/jest": "^24.0.18",
     "jest": "^24.9.0",
-    "ts-jest": "^24.1.0"
+    "ts-jest": "^24.1.0",
+    "typescript": "^3.6.3"
   }
 }
