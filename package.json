@@ -5,13 +5,14 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "build": "tsc",
+    "build": "rimraf dist && tsc",
     "lint": "tslint --project tsconfig.json",
     "prod": "tsc && node ./build/app.js"
   },
   "author": "neo.wilder",
   "license": "ISC",
   "dependencies": {
+    "rimraf": "^3.0.0",
     "web3": "^1.2.1"
   },
   "devDependencies": {
