@@ -3,7 +3,13 @@
       "resolveJsonModule": true,
       "esModuleInterop": true,
       "allowSyntheticDefaultImports": true,
-      "jsx": "preserve",
+      "strict": true,
+      "noImplicitAny": false,
+      "baseUrl": "src",
       "lib": ["es2018", "dom"],
-  }
+      "outDir": "./build"
+  },
+  "include": [
+    "./src"
+  ]
 }
