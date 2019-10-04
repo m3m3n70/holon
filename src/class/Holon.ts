@@ -7,14 +7,11 @@ export interface HolonInterface {
     getControllerAddress: () => string;
     getHolonAddress: () => Promise<string>;
     getPrimaryTokenAddress: () => Promise<string>;
-    getNeurons: () => any[];
 }
 
 export class Holon implements HolonInterface {
+    // @ts-ignore: TS2564 - no initializer
     private controller: HolonController;
-    private holonAddress: string;
-    private holonName: string;
-    private primaryTokenAddress: string;
 
     constructor(private controllerAddress: string, private provider: Web3Provider) {}
 
@@ -32,8 +29,7 @@ export class Holon implements HolonInterface {
     }
 
     public async getHolonName() {
-        this.holonName = await this.controller.getHolonName();
-        return this.holonName;
+        return await this.controller.getHolonName();
     }
 
     public getControllerAddress() {
@@ -41,13 +37,11 @@ export class Holon implements HolonInterface {
     }
 
     public async getHolonAddress() {
-        this.holonAddress = await this.controller.getHolonAddress();
-        return this.holonAddress;
+        return await this.controller.getHolonAddress();
     }
 
     public async getPrimaryTokenAddress() {
-        this.primaryTokenAddress = await this.controller.getPrimaryTokenAddress();
-        return this.primaryTokenAddress;
+        return await this.controller.getPrimaryTokenAddress();
     }
 
 }

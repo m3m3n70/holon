@@ -14,7 +14,7 @@ export interface HolonTokenType {
 }
 
 export interface HolonTokenInterface {
-    initializeExistingToken: (_holonTokenAddress: string) => void;
+    initializeExistingToken: () => void;
     getTokenName: () => Promise<string>;
     getTokenSymbol: () => Promise<string>;
     getTokenCap: () => Promise<number>;
@@ -23,11 +23,8 @@ export interface HolonTokenInterface {
 }
 
 export class HolonToken implements HolonTokenInterface {
+    // @ts-ignore: TS2564 - no initializer
     private holonToken: HolonTokenType;
-    private tokenName: string;
-    private tokenSymbol: string;
-    private tokenCap: number;
-    private tokenTotalSupply: number;
 
     constructor(private holonTokenAddress: string, private provider: Web3Provider ) {}
 
@@ -44,25 +41,19 @@ export class HolonToken implements HolonTokenInterface {
     }
 
     public async getTokenName()  {
-        this.tokenName = await this.holonToken.methods.name().call();
-        return this.tokenName;
+        return await this.holonToken.methods.name().call();
     }
 
     public async getTokenSymbol() {
-        this.tokenSymbol = await this.holonToken.methods.symbol().call();
-        return this.tokenSymbol;
+        return await this.holonToken.methods.symbol().call();
     }
 
     public async getTokenCap() {
-        this.tokenCap = await this.holonToken.methods.cap().call();
-        this.tokenCap = Number(this.tokenCap);
-        return this.tokenCap;
+        return Number(await this.holonToken.methods.cap().call());
     }
 
     public async getTokenTotalSupply() {
-        this.tokenTotalSupply = await this.holonToken.methods.totalSupply().call();
-        this.tokenTotalSupply = Number(this.tokenTotalSupply);
-        return this.tokenTotalSupply;
+        return Number(await this.holonToken.methods.totalSupply().call());
     }
 
     public async getBalanceOf(_address: string) {

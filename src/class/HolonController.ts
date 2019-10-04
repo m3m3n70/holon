@@ -25,11 +25,14 @@ export interface HolonInterface {
 }
 
 export class HolonController implements HolonInterface {
+    // @ts-ignore: TS2564 - no initializer
     private controller: HolonControllerType;
+    // @ts-ignore: TS2564 - no initializer
     private holon: HolonType;
+    // @ts-ignore: TS2564 - no initializer
     private holonAddress: string;
+    // @ts-ignore: TS2564 - no initializer
     private holonName: string;
-    private primaryTokenAddress: string;
 
     constructor(private controllerAddress: string, private provider: Web3Provider ) {}
 
@@ -58,8 +61,7 @@ export class HolonController implements HolonInterface {
     }
 
     public async getPrimaryTokenAddress() {
-        this.primaryTokenAddress = await this.controller.methods.daoToken().call();
-        return this.primaryTokenAddress;
+        return await this.controller.methods.daoToken().call();
     }
 
 }

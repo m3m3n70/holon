@@ -17,8 +17,7 @@ expect.extend({
 });
 
 describe('Test methods with existing Holon', () => {
-    const provider = injectProvider();
-    const holon = new Holon(provider, config.holonController);
+    const holon = new Holon(config.holonController, injectProvider());
 
     test('Holon is initialized with a Provider', async () => {
         const currentProvider = await holon.getProvider();
@@ -38,11 +37,5 @@ describe('Test methods with existing Holon', () => {
     test('Holon has a Primary Token Address', () => {
         holon.initializeExistingHolon();
         expect(holon.getPrimaryTokenAddress()).toBeDefined();
-    });
-
-    test('Holon.getNeurons() returns Array of Neurons', async () => {
-        await holon.initializeExistingHolon();
-        const neuronsArray = holon.getNeurons();
-        expect(Array.isArray(neuronsArray)).toBeDefined();
     });
 });
