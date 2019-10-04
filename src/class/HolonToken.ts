@@ -14,12 +14,12 @@ export interface HolonTokenType {
 }
 
 export interface HolonTokenInterface {
-    initializeExistingToken: (_holonTokenAddress: string) => Object;
+    initializeExistingToken: (_holonTokenAddress: string) => void;
     getTokenName: () => Promise<string>;
     getTokenSymbol: () => Promise<string>;
     getTokenCap: () => Promise<number>;
     getTokenTotalSupply: () => Promise<number>;
-    getBalanceOf: (address: string) => Promise<Number>;
+    getBalanceOf: (address: string) => Promise<number>;
 }
 
 export class HolonToken implements HolonTokenInterface {

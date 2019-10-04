@@ -15,13 +15,13 @@ export interface Web3Provider {
 export interface ProviderInterface {
     getProvider(): Web3Provider;
     getConnectionStatus(): boolean;
-    getHttpProvider(): Object;
+    getHttpProvider(): any;
 }
 
 export class Provider implements ProviderInterface {
-    public HttpProvider: Object;
+    public HttpProvider: any;
     private provider: Web3Provider;
-    private isConnected: boolean;
+    private isConnected: boolean = false;
 
     constructor(_provider: Web3Provider) {
         this.provider = _provider;

@@ -21,13 +21,13 @@ test('HolonToken returns address', async () =>  {
 test('HolonToken has name', async () =>  {
     await holonToken.initializeExistingToken(config.holonToken);
     const holonTokenAddress = await holonToken.getTokenName();
-    expect(holonTokenAddress).toBeDefined;
+    expect(holonTokenAddress).toBeDefined();
 });
 
 test('HolonToken has symbol', async () =>  {
     await holonToken.initializeExistingToken(config.holonToken);
     const holonTokenSymbol = await holonToken.getTokenSymbol();
-    expect(holonTokenSymbol).toBeDefined;
+    expect(holonTokenSymbol).toBeDefined();
 });
 
 test('HolonToken has cap', async () =>  {
