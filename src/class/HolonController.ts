@@ -1,20 +1,20 @@
-import HolonABI from "../abi/Holon.json";
-import HolonControllerABI from "../abi/HolonController.json";
-import { Web3Provider } from "./Web3Provider";
+import HolonABI from '../abi/Holon.json';
+import HolonControllerABI from '../abi/HolonController.json';
+import { Web3Provider } from './Web3Provider';
 
 export interface HolonControllerType {
     methods: {
         dao(): { call(): string },
         daoToken(): { call(): string },
-        getNeurons(): { call(): Array<any> }
+        getNeurons(): { call(): any[] },
     };
     _address: string;
 }
 
 export interface HolonType {
     methods: {
-        daoName(): { call(): string }
-    }
+        daoName(): { call(): string },
+    };
 }
 
 export interface HolonInterface {
@@ -27,11 +27,11 @@ export interface HolonInterface {
 export class HolonController implements HolonInterface {
     private controller: HolonControllerType;
     private holon: HolonType;
-    private holonAddress: string; 
+    private holonAddress: string;
     private holonName: string;
     private primaryTokenAddress: string;
 
-    constructor(private controllerAddress: string, private provider: Web3Provider, ) {}
+    constructor(private controllerAddress: string, private provider: Web3Provider ) {}
 
     public async initializeHolonController() {
         try {
@@ -46,7 +46,7 @@ export class HolonController implements HolonInterface {
 
     public getHolonName() {
         return this.holonName;
-    }   
+    }
 
     public async getControllerAddress() {
         this.controllerAddress = this.controller._address;

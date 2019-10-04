@@ -1,5 +1,5 @@
-import HolonTokenABI from "../abi/HolonToken.json";
-import { Web3Provider } from "./Web3Provider";
+import HolonTokenABI from '../abi/HolonToken.json';
+import { Web3Provider } from './Web3Provider';
 
 export interface HolonTokenType {
     methods: {
@@ -9,7 +9,7 @@ export interface HolonTokenType {
         totalSupply(): { call(): number },
         daoToken(): { call(): string },
         balanceOf(address: string): { call(): string },
-        owner(): { call(): string }
+        owner(): { call(): string },
     };
 }
 
@@ -29,7 +29,7 @@ export class HolonToken implements HolonTokenInterface {
     private tokenCap: number;
     private tokenTotalSupply: number;
 
-    constructor(private holonTokenAddress: string, private provider: Web3Provider, ) {}
+    constructor(private holonTokenAddress: string, private provider: Web3Provider ) {}
 
     public async initializeExistingToken() {
         try {
@@ -46,7 +46,7 @@ export class HolonToken implements HolonTokenInterface {
     public async getTokenName()  {
         this.tokenName = await this.holonToken.methods.name().call();
         return this.tokenName;
-    }   
+    }
 
     public async getTokenSymbol() {
         this.tokenSymbol = await this.holonToken.methods.symbol().call();
@@ -66,8 +66,8 @@ export class HolonToken implements HolonTokenInterface {
     }
 
     public async getBalanceOf(_address: string) {
-        let balance = await this.holonToken.methods.balanceOf(_address).call();
-        let strNumber = parseInt(balance);
+        const balance = await this.holonToken.methods.balanceOf(_address).call();
+        const strNumber = parseInt(balance);
         return strNumber;
     }
 

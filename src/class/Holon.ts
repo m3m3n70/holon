@@ -1,5 +1,5 @@
-import { Web3Provider } from "./Web3Provider";
-import { HolonController } from "./HolonController";
+import { Web3Provider } from './Web3Provider';
+import { HolonController } from './HolonController';
 
 export interface HolonInterface {
     getProvider: () => Web3Provider;
@@ -7,12 +7,12 @@ export interface HolonInterface {
     getControllerAddress: () => string;
     getHolonAddress: () => Promise<string>;
     getPrimaryTokenAddress: () => Promise<string>;
-    getNeurons: () => Array<any>;
+    getNeurons: () => any[];
 }
 
 export class Holon implements HolonInterface {
     private controller: HolonController;
-    private holonAddress: string; 
+    private holonAddress: string;
     private holonName: string;
     private primaryTokenAddress: string;
 
@@ -30,11 +30,11 @@ export class Holon implements HolonInterface {
     public getProvider() {
         return this.provider;
     }
-    
+
     public async getHolonName() {
         this.holonName = await this.controller.getHolonName();
         return this.holonName;
-    }   
+    }
 
     public getControllerAddress() {
         return this.controllerAddress;

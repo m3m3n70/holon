@@ -1,27 +1,27 @@
-import Web3 from "Web3";
-import config from "../config/config.json";
+import Web3 from 'Web3';
+import config from '../config/config.json';
 
 export interface Web3Provider {
     (): Web3Provider;
     eth: {
-        Contract: { new(ABI: any, address: string): any },
+        Contract: new(ABI: any, address: string) => any,
         getAccounts: () => string;
     };
     methods: {
-        dao(): { call: () => void }
+        dao(): { call: () => void },
     };
 }
 
 export interface ProviderInterface {
-    getProvider(): Web3Provider; 
+    getProvider(): Web3Provider;
     getConnectionStatus(): boolean;
     getHttpProvider(): Object;
 }
 
 export class Provider implements ProviderInterface {
+    public HttpProvider: Object;
     private provider: Web3Provider;
     private isConnected: boolean;
-    public HttpProvider: Object;
 
     constructor(_provider: Web3Provider) {
         this.provider = _provider;
