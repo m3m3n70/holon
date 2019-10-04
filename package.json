@@ -4,10 +4,12 @@
   "description": "An interface to the Holon Universe",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test": "npm run test:unit && npm run test:integration",
+    "pretest": "npm run lint",
+    "test:unit": "jest -c jest.config.js",
+    "test:integration": "jest -c jest.integration.config.js",
     "build": "rimraf dist && tsc",
     "lint": "tslint --project tsconfig.json",
-    "prod": "tsc && node ./build/app.js"
   },
   "author": "neo.wilder",
   "license": "ISC",
