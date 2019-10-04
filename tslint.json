@@ -18,8 +18,7 @@
             "named": "never",
             "asyncArrow": "always"
         }],
-        "no-unused-expression": [true, "allow-fast-null-checks"],
-        "object-curly-spacing": "always"
+        "no-unused-expression": [true, "allow-fast-null-checks"]
     },
     "rulesDirectory": []
 }
