@@ -2,7 +2,7 @@ import HolonABI from '../abi/Holon.json';
 import HolonControllerABI from '../abi/HolonController.json';
 import { Web3Provider } from './Web3Provider';
 
-export interface HolonControllerType {
+interface HolonControllerType {
     methods: {
         dao(): { call(): string },
         daoToken(): { call(): string },
@@ -11,20 +11,13 @@ export interface HolonControllerType {
     _address: string;
 }
 
-export interface HolonType {
+interface HolonType {
     methods: {
         daoName(): { call(): string },
     };
 }
 
-export interface HolonInterface {
-    getHolonName: () => string;
-    getControllerAddress: () => Promise<string>;
-    getHolonAddress: () => Promise<string>;
-    getPrimaryTokenAddress: () => Promise<string>;
-}
-
-export class HolonController implements HolonInterface {
+export class HolonController {
     // @ts-ignore: TS2564 - no initializer
     private controller: HolonControllerType;
     // @ts-ignore: TS2564 - no initializer
@@ -63,5 +56,4 @@ export class HolonController implements HolonInterface {
     public async getPrimaryTokenAddress() {
         return await this.controller.methods.daoToken().call();
     }
-
 }

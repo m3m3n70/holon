@@ -1,15 +1,7 @@
 import { Web3Provider } from './Web3Provider';
 import { HolonController } from './HolonController';
 
-export interface HolonInterface {
-    getProvider: () => Web3Provider;
-    getHolonName: () => Promise<string>;
-    getControllerAddress: () => string;
-    getHolonAddress: () => Promise<string>;
-    getPrimaryTokenAddress: () => Promise<string>;
-}
-
-export class Holon implements HolonInterface {
+export class Holon {
     // @ts-ignore: TS2564 - no initializer
     private controller: HolonController;
 
@@ -43,5 +35,4 @@ export class Holon implements HolonInterface {
     public async getPrimaryTokenAddress() {
         return await this.controller.getPrimaryTokenAddress();
     }
-
 }

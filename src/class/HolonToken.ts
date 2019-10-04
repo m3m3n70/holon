@@ -1,7 +1,7 @@
 import HolonTokenABI from '../abi/HolonToken.json';
 import { Web3Provider } from './Web3Provider';
 
-export interface HolonTokenType {
+interface HolonTokenType {
     methods: {
         name(): { call(): string },
         symbol(): { call(): string },
@@ -13,16 +13,7 @@ export interface HolonTokenType {
     };
 }
 
-export interface HolonTokenInterface {
-    initializeExistingToken: () => void;
-    getTokenName: () => Promise<string>;
-    getTokenSymbol: () => Promise<string>;
-    getTokenCap: () => Promise<number>;
-    getTokenTotalSupply: () => Promise<number>;
-    getBalanceOf: (address: string) => Promise<number>;
-}
-
-export class HolonToken implements HolonTokenInterface {
+export class HolonToken {
     // @ts-ignore: TS2564 - no initializer
     private holonToken: HolonTokenType;
 
@@ -61,5 +52,4 @@ export class HolonToken implements HolonTokenInterface {
         const strNumber = parseInt(balance);
         return strNumber;
     }
-
 }
