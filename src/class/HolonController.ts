@@ -44,12 +44,12 @@ export class HolonController {
         return this.holonName;
     }
 
-    public async getControllerAddress() {
+    public getControllerAddress() {
         this.controllerAddress = this.controller._address;
         return this.controllerAddress;
     }
 
-    public async getHolonAddress() {
+    public getHolonAddress() {
         return this.holonAddress;
     }
 

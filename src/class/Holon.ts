@@ -20,16 +20,16 @@ export class Holon {
         return this.provider;
     }
 
-    public async getHolonName() {
-        return await this.controller.getHolonName();
+    public getHolonName() {
+        return this.controller.getHolonName();
     }
 
     public getControllerAddress() {
         return this.controllerAddress;
     }
 
-    public async getHolonAddress() {
-        return await this.controller.getHolonAddress();
+    public getHolonAddress() {
+        return this.controller.getHolonAddress();
     }
 
     public async getPrimaryTokenAddress() {
