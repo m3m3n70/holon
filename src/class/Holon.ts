@@ -9,7 +9,7 @@ export class Holon {
 
   public async initializeExistingHolon() {
     try {
-      this.controller = await new HolonController(this.controllerAddress, this.provider);
+      this.controller = new HolonController(this.controllerAddress, this.provider);
       await this.controller.initializeHolonController();
     } catch (e) {
       console.error(e);
@@ -20,8 +20,20 @@ export class Holon {
     return this.provider;
   }
 
-  public getHolonName() {
+  public async getName() {
+    if (!this.controller) {
+      await this.initializeExistingHolon();
+    }
+
     return this.controller.getHolonName();
+  }
+
+  public async getPrimaryToken() {
+    if (!this.controller) {
+      await this.initializeExistingHolon();
+    }
+
+    return await this.controller.getPrimaryToken();
   }
 
   public getControllerAddress() {
