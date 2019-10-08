@@ -24,24 +24,23 @@ export class HolonController {
   private holon: HolonType;
   // @ts-ignore: TS2564 - no initializer
   private holonAddress: string;
-  // @ts-ignore: TS2564 - no initializer
-  private holonName: string;
 
   constructor(private controllerAddress: string, private provider: Web3Provider) { }
 
   public async initializeHolonController() {
     try {
-      this.controller = await new this.provider.eth.Contract(HolonControllerABI, this.controllerAddress);
+      this.controller = new this.provider.eth.Contract(HolonControllerABI, this.controllerAddress);
       this.holonAddress = await this.controller.methods.dao().call();
-      this.holon = await new this.provider.eth.Contract(HolonABI, this.holonAddress);
-      this.holonName = await this.holon.methods.daoName().call();
+      this.holon = new this.provider.eth.Contract(HolonABI, this.holonAddress);
     } catch (e) {
       console.error(e);
     }
   }
 
-  public getHolonName() {
-    return this.holonName;
+  public async getHolonName() {
+    await this.initializeHolonController();
+
+    return await this.holon.methods.daoName().call();
   }
 
   public getControllerAddress() {
@@ -49,8 +48,14 @@ export class HolonController {
     return this.controllerAddress;
   }
 
-  public getHolonAddress() {
+  public async getHolonAddress() {
+    await this.initializeHolonController();
+
     return this.holonAddress;
+  }
+
+  public getPrimaryToken() {
+    return '';
   }
 
   public async getPrimaryTokenAddress() {
