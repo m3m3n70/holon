@@ -15,6 +15,7 @@
         "variable-name": [true, "check-format", "allow-leading-underscore", "allow-pascal-case"],
         "curly": [true, "ignore-same-line"],
         "no-empty": [true, "allow-empty-catch"],
+        "indent": [true, "spaces", 2],
         "space-before-function-paren": [true, {
             "anonymous": "never",
             "named": "never",
