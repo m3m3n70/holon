@@ -1,6 +1,7 @@
 import HolonABI from '../abi/Holon.json';
 import HolonControllerABI from '../abi/HolonController.json';
 import { Web3Provider } from './Web3Provider';
+import { HolonToken } from './HolonToken';
 
 interface HolonControllerType {
   methods: {
@@ -54,11 +55,13 @@ export class HolonController {
     return this.holonAddress;
   }
 
-  public getPrimaryToken() {
-    return '';
+  public async getPrimaryToken() {
+    return new HolonToken(await this.getPrimaryTokenAddress(), this.provider);
   }
 
   public async getPrimaryTokenAddress() {
+    await this.initializeHolonController();
+
     return await this.controller.methods.daoToken().call();
   }
 }

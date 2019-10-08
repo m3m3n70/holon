@@ -2,6 +2,7 @@ import HolonABI from '../abi/Holon.json';
 import HolonControllerABI from '../abi/HolonController.json';
 
 import { HolonController } from '../class/HolonController';
+import { HolonToken } from '../class/HolonToken';
 
 const mockDaoNameCall = jest.fn();
 const mockDaoCall = jest.fn();
@@ -26,9 +27,13 @@ const ethProvider = {
   }),
 };
 
+const getProvider = () => ({ eth: ethProvider } as any);
+
+jest.mock('../class/HolonToken', () => ({ HolonToken: jest.fn().mockImplementation() }));
+
 describe('HolonController', () => {
-  const subject = (address: string = '', provider: any = ethProvider) => {
-    return new HolonController(address, { eth: provider } as any);
+  const subject = (address: string = '', provider: any = getProvider()) => {
+    return new HolonController(address, provider);
   };
 
   beforeEach(() => jest.clearAllMocks());
@@ -71,5 +76,17 @@ describe('HolonController', () => {
     await controller.getHolonName();
 
     expect(ethProvider.Contract).toHaveBeenNthCalledWith(2, HolonABI, holonAddress);
+  });
+
+  test('it gets holon token for address', async () => {
+    const tokenAddress = '0x0D1C97113D70E4D04345D55807CB19C648E17FBA';
+
+    const controller = subject();
+
+    mockDaoTokenCall.mockResolvedValue(tokenAddress);
+
+    await controller.getPrimaryToken();
+
+    expect(HolonToken).toHaveBeenCalledWith(tokenAddress, getProvider());
   });
 });

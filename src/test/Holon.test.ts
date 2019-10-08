@@ -3,11 +3,10 @@ import { HolonController } from '../class/HolonController';
 
 const getHolonName = jest.fn();
 const getPrimaryToken = jest.fn();
-const initializeHolonController = jest.fn();
 
 jest.mock('../class/HolonController', () => ({
   HolonController: jest.fn().mockImplementation(() => {
-    return { getHolonName, getPrimaryToken, initializeHolonController };
+    return { getHolonName, getPrimaryToken, initializeHolonController: () => undefined };
   }),
 }));
 
