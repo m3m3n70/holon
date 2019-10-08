@@ -6,7 +6,7 @@ const getPrimaryToken = jest.fn();
 
 jest.mock('../class/HolonController', () => ({
   HolonController: jest.fn().mockImplementation(() => {
-    return { getHolonName, getPrimaryToken, initializeHolonController: () => undefined };
+    return { getHolonName, getPrimaryToken };
   }),
 }));
 

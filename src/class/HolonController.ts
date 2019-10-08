@@ -28,16 +28,6 @@ export class HolonController {
 
   constructor(private controllerAddress: string, private provider: Web3Provider) { }
 
-  public async initializeHolonController() {
-    try {
-      this.controller = new this.provider.eth.Contract(HolonControllerABI, this.controllerAddress);
-      this.holonAddress = await this.controller.methods.dao().call();
-      this.holon = new this.provider.eth.Contract(HolonABI, this.holonAddress);
-    } catch (e) {
-      console.error(e);
-    }
-  }
-
   public async getHolonName() {
     await this.initializeHolonController();
 
@@ -63,5 +53,15 @@ export class HolonController {
     await this.initializeHolonController();
 
     return await this.controller.methods.daoToken().call();
+  }
+
+  private async initializeHolonController() {
+    try {
+      this.controller = new this.provider.eth.Contract(HolonControllerABI, this.controllerAddress);
+      this.holonAddress = await this.controller.methods.dao().call();
+      this.holon = new this.provider.eth.Contract(HolonABI, this.holonAddress);
+    } catch (e) {
+      console.error(e);
+    }
   }
 }

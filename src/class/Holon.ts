@@ -7,15 +7,6 @@ export class Holon {
 
   constructor(private controllerAddress: string, private provider: Web3Provider) { }
 
-  public async initializeExistingHolon() {
-    try {
-      this.controller = new HolonController(this.controllerAddress, this.provider);
-      await this.controller.initializeHolonController();
-    } catch (e) {
-      console.error(e);
-    }
-  }
-
   public getProvider() {
     return this.provider;
   }
@@ -46,5 +37,13 @@ export class Holon {
 
   public async getPrimaryTokenAddress() {
     return await this.controller.getPrimaryTokenAddress();
+  }
+
+  private async initializeExistingHolon() {
+    try {
+      this.controller = new HolonController(this.controllerAddress, this.provider);
+    } catch (e) {
+      console.error(e);
+    }
   }
 }
