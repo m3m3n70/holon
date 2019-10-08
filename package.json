@@ -7,6 +7,7 @@
     "test": "npm run test:unit && npm run test:integration",
     "pretest": "npm run lint",
     "test:unit": "jest -c jest.config.js",
+    "test:unit:watch": "jest -c jest.config.js --watch",
     "test:integration": "jest -c jest.integration.config.js",
     "build": "rimraf dist && tsc",
     "lint": "tslint --project tsconfig.json",
