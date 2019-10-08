@@ -89,4 +89,14 @@ describe('HolonController', () => {
 
     expect(HolonToken).toHaveBeenCalledWith(tokenAddress, getProvider());
   });
+
+  test('it gets primary token address', async () => {
+    const tokenAddress = '0x0D1C97113D70E4D04345D55807CB19C648E17FBA';
+
+    const controller = subject();
+
+    mockDaoTokenCall.mockResolvedValue(tokenAddress);
+
+    expect(await controller.getPrimaryTokenAddress()).toBe(tokenAddress);
+  });
 });

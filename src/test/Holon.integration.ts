@@ -25,17 +25,14 @@ describe('Test methods with existing Holon', () => {
   });
 
   test('Holon has a Controller Address', () => {
-    holon.initializeExistingHolon();
     expect(holon.getControllerAddress()).toBeDefined();
   });
 
-  test('Holon has a Holon Address', () => {
-    holon.initializeExistingHolon();
-    expect(holon.getHolonAddress()).toBeDefined();
+  test('Holon has a Holon Address', async () => {
+    expect(await holon.getAddress()).toBeDefined();
   });
 
-  test('Holon has a Primary Token Address', () => {
-    holon.initializeExistingHolon();
-    expect(holon.getPrimaryTokenAddress()).toBeDefined();
+  test('Holon has a Primary Token Address', async () => {
+    expect(await holon.getPrimaryTokenAddress()).toBeDefined();
   });
 });

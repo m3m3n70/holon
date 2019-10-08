@@ -31,11 +31,19 @@ export class Holon {
     return this.controllerAddress;
   }
 
-  public getHolonAddress() {
-    return this.controller.getHolonAddress();
+  public async getAddress() {
+    if (!this.controller) {
+      await this.initializeExistingHolon();
+    }
+
+    return await this.controller.getHolonAddress();
   }
 
   public async getPrimaryTokenAddress() {
+    if (!this.controller) {
+      await this.initializeExistingHolon();
+    }
+
     return await this.controller.getPrimaryTokenAddress();
   }
 
