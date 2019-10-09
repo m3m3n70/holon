@@ -10,8 +10,7 @@
     "test:unit:watch": "jest -c jest.config.js --watch",
     "test:integration": "jest -c jest.integration.config.js",
     "build": "rimraf dist && tsc",
-    "lint": "tslint --project tsconfig.json",
-    "preinstall": "npm run build"
+    "lint": "tslint --project tsconfig.json"
   },
   "author": "neo.wilder",
   "license": "ISC",
