@@ -1,6 +1,7 @@
-import { injectProvider } from '../class/Web3Provider';
+import Web3 from 'Web3';
 import { Holon } from '../class/Holon';
 import config from '../config/config.json';
+import { HolonClient } from '../class/HolonClient';
 
 expect.extend({
   toBeType(received, argument) {
@@ -17,22 +18,28 @@ expect.extend({
 });
 
 describe('Test methods with existing Holon', () => {
-  const holon = new Holon(config.holonController, injectProvider());
+  const subject = () => {
+    const providerAddress = config.web3host;
+    const httpProvider = new Web3.providers.HttpProvider(providerAddress);
+    const provider = new HolonClient(new Web3(httpProvider));
+
+    return new Holon(config.holonController, provider);
+  };
 
   test('Holon is initialized with a Provider', async () => {
-    const currentProvider = await holon.getProvider();
+    const currentProvider = await subject().getProvider();
     expect(currentProvider).toHaveProperty('eth');
   });
 
   test('Holon has a Controller Address', () => {
-    expect(holon.getControllerAddress()).toBeDefined();
+    expect(subject().getControllerAddress()).toBeDefined();
   });
 
   test('Holon has a Holon Address', async () => {
-    expect(await holon.getAddress()).toBeDefined();
+    expect(await subject().getAddress()).toBeDefined();
   });
 
   test('Holon has a Primary Token Address', async () => {
-    expect(await holon.getPrimaryTokenAddress()).toBeDefined();
+    expect(await subject().getPrimaryTokenAddress()).toBeDefined();
   });
 });
