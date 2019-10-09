@@ -1,5 +1,4 @@
-import HolonTokenABI from '../abi/HolonToken.json';
-import { Web3Provider } from './Web3Provider';
+import { ContractProvider, ContractType } from '../class/HolonClient';
 
 interface HolonTokenType {
   methods: {
@@ -15,40 +14,24 @@ interface HolonTokenType {
 
 export class HolonToken {
   // @ts-ignore: TS2564 - no initializer
-  private holonToken: HolonTokenType;
+  private _contract: HolonTokenType;
 
-  constructor(private holonTokenAddress: string, private provider: Web3Provider) { }
+  constructor(private holonTokenAddress: string, private provider: ContractProvider) { }
 
   public async getName() {
-    if (!this.holonToken) {
-      this.initializeExistingToken();
-    }
-
-    return await this.holonToken.methods.name().call();
+    return await this.contract.methods.name().call();
   }
 
   public async getSymbol() {
-    if (!this.holonToken) {
-      this.initializeExistingToken();
-    }
-
-    return await this.holonToken.methods.symbol().call();
+    return await this.contract.methods.symbol().call();
   }
 
   public async getCap() {
-    if (!this.holonToken) {
-      this.initializeExistingToken();
-    }
-
-    return Number(await this.holonToken.methods.cap().call());
+    return Number(await this.contract.methods.cap().call());
   }
 
   public async getTotalSupply() {
-    if (!this.holonToken) {
-      this.initializeExistingToken();
-    }
-
-    return Number(await this.holonToken.methods.totalSupply().call());
+    return Number(await this.contract.methods.totalSupply().call());
   }
 
   public getAddress() {
@@ -56,16 +39,16 @@ export class HolonToken {
   }
 
   public async getBalanceOf(_address: string) {
-    const balance = await this.holonToken.methods.balanceOf(_address).call();
+    const balance = await this.contract.methods.balanceOf(_address).call();
     const strNumber = parseInt(balance);
     return strNumber;
   }
 
-  private initializeExistingToken() {
-    try {
-      this.holonToken = new this.provider.eth.Contract(HolonTokenABI, this.holonTokenAddress);
-    } catch (e) {
-      console.error(e);
+  private get contract() {
+    if (!this._contract) {
+      this._contract = this.provider.getContract(ContractType.HolonToken, this.holonTokenAddress);
     }
+
+    return this._contract;
   }
 }

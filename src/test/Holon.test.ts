@@ -6,6 +6,8 @@ const getHolonAddress = jest.fn();
 const getPrimaryToken = jest.fn();
 const getPrimaryTokenAddress = jest.fn();
 
+const provider = { getContract: () => undefined };
+
 jest.mock('../class/HolonController', () => ({
   HolonController: jest.fn().mockImplementation(() => {
     return { getHolonName, getHolonAddress, getPrimaryToken, getPrimaryTokenAddress };
@@ -14,7 +16,7 @@ jest.mock('../class/HolonController', () => ({
 
 describe('Holon', () => {
   const subject = (address: string = '') => {
-    return new Holon(address, {} as any);
+    return new Holon(address, provider);
   };
 
   beforeEach(() => jest.clearAllMocks());
@@ -38,8 +40,9 @@ describe('Holon', () => {
     expect(await holon.getAddress()).toBe(holonAddress);
   });
 
-  test('it only creates a single controller when getting name', async () => {
-    const holon = subject();
+  test('it creates a single controller when getting name', async () => {
+    const address = '0x0D1C97113D70E4D04345D55807CB19C648E17FBA';
+    const holon = subject(address);
 
     getHolonName.mockResolvedValue(name);
 
@@ -47,6 +50,7 @@ describe('Holon', () => {
     await holon.getName();
 
     expect(HolonController).toHaveBeenCalledTimes(1);
+    expect(HolonController).toHaveBeenCalledWith(address, provider);
   });
 
   test('it gets primary token from controller', async () => {
@@ -68,12 +72,14 @@ describe('Holon', () => {
     expect(await holon.getPrimaryTokenAddress()).toBe(tokenAddress);
   });
 
-  test('it only creates a single controller when getting token', async () => {
-    const holon = subject();
+  test('it creates a single controller when getting token', async () => {
+    const address = '0x0D1C97113D70E4D04345D55807CB19C648E17FBA';
+    const holon = subject(address);
 
     await holon.getPrimaryToken();
     await holon.getPrimaryToken();
 
     expect(HolonController).toHaveBeenCalledTimes(1);
+    expect(HolonController).toHaveBeenCalledWith(address, provider);
   });
 });

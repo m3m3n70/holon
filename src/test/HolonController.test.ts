@@ -1,8 +1,6 @@
-import HolonABI from '../abi/Holon.json';
-import HolonControllerABI from '../abi/HolonController.json';
-
 import { HolonController } from '../class/HolonController';
 import { HolonToken } from '../class/HolonToken';
+import { ContractProvider, ContractType } from '../class/HolonClient';
 
 const mockDaoNameCall = jest.fn();
 const mockDaoCall = jest.fn();
@@ -17,22 +15,20 @@ const controllerContract = {
 
 const holonContract = { methods: { daoName: () => ({ call: mockDaoNameCall }) } };
 
-const ethProvider = {
-  Contract: jest.fn().mockImplementation((abi, _address: string) => {
-    if (abi === HolonControllerABI) {
+const contractProvider: ContractProvider = {
+  getContract: jest.fn().mockImplementation((type, _address: string) => {
+    if (type === ContractType.HolonController) {
       return controllerContract;
-    } else if (abi === HolonABI) {
+    } else if (type === ContractType.Holon) {
       return holonContract;
     }
   }),
 };
 
-const getProvider = () => ({ eth: ethProvider } as any);
-
 jest.mock('../class/HolonToken', () => ({ HolonToken: jest.fn().mockImplementation() }));
 
 describe('HolonController', () => {
-  const subject = (address: string = '', provider: any = getProvider()) => {
+  const subject = (address: string = '', provider: ContractProvider = contractProvider) => {
     return new HolonController(address, provider);
   };
 
@@ -63,7 +59,7 @@ describe('HolonController', () => {
 
     await controller.getHolonName();
 
-    expect(ethProvider.Contract).toHaveBeenNthCalledWith(1, HolonControllerABI, controllerAddress);
+    expect(contractProvider.getContract).toHaveBeenNthCalledWith(1, ContractType.HolonController, controllerAddress);
   });
 
   test('it gets controller contract for holon address', async () => {
@@ -75,7 +71,7 @@ describe('HolonController', () => {
 
     await controller.getHolonName();
 
-    expect(ethProvider.Contract).toHaveBeenNthCalledWith(2, HolonABI, holonAddress);
+    expect(contractProvider.getContract).toHaveBeenNthCalledWith(2, ContractType.Holon, holonAddress);
   });
 
   test('it gets holon token for address', async () => {
@@ -87,7 +83,7 @@ describe('HolonController', () => {
 
     await controller.getPrimaryToken();
 
-    expect(HolonToken).toHaveBeenCalledWith(tokenAddress, getProvider());
+    expect(HolonToken).toHaveBeenCalledWith(tokenAddress, contractProvider);
   });
 
   test('it gets primary token address', async () => {

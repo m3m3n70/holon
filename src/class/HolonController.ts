@@ -1,6 +1,4 @@
-import HolonABI from '../abi/Holon.json';
-import HolonControllerABI from '../abi/HolonController.json';
-import { Web3Provider } from './Web3Provider';
+import { ContractProvider, ContractType } from '../class/HolonClient';
 import { HolonToken } from './HolonToken';
 
 interface HolonControllerType {
@@ -26,7 +24,7 @@ export class HolonController {
   // @ts-ignore: TS2564 - no initializer
   private holonAddress: string;
 
-  constructor(private controllerAddress: string, private provider: Web3Provider) { }
+  constructor(private controllerAddress: string, private provider: ContractProvider) { }
 
   public async getHolonName() {
     await this.initializeHolonController();
@@ -57,9 +55,9 @@ export class HolonController {
 
   private async initializeHolonController() {
     try {
-      this.controller = new this.provider.eth.Contract(HolonControllerABI, this.controllerAddress);
+      this.controller = this.provider.getContract(ContractType.HolonController, this.controllerAddress);
       this.holonAddress = await this.controller.methods.dao().call();
-      this.holon = new this.provider.eth.Contract(HolonABI, this.holonAddress);
+      this.holon = this.provider.getContract(ContractType.Holon, this.holonAddress);
     } catch (e) {
       console.error(e);
     }

@@ -1,27 +1,25 @@
 import { HolonToken } from '../class/HolonToken';
+import { ContractProvider, ContractType } from '../class/HolonClient';
 
 const mockNameCall = jest.fn();
 const mockCapCall = jest.fn();
 const mockTotalSupplyCall = jest.fn();
 const mockSymbolCall = jest.fn();
-const tokenContract = {
-  methods: {
-    name: () => ({ call: mockNameCall }),
-    symbol: () => ({ call: mockSymbolCall }),
-    cap: () => ({ call: mockCapCall }),
-    totalSupply: () => ({ call: mockTotalSupplyCall }),
-  },
-};
 
-const provider = {
-  Contract: jest.fn().mockImplementation((_abi, _address: string) => {
-    return tokenContract;
-  }),
+const contractProvider: ContractProvider = {
+  getContract: jest.fn().mockImplementation(() => ({
+    methods: {
+      name: () => ({ call: mockNameCall }),
+      symbol: () => ({ call: mockSymbolCall }),
+      cap: () => ({ call: mockCapCall }),
+      totalSupply: () => ({ call: mockTotalSupplyCall }),
+    },
+  })),
 };
 
 describe('HolonToken', () => {
   const subject = (address: string = '') => {
-    return new HolonToken(address, { eth: provider } as any);
+    return new HolonToken(address, contractProvider);
   };
 
   beforeEach(() => jest.clearAllMocks());
@@ -62,14 +60,16 @@ describe('HolonToken', () => {
     expect(await token.getTotalSupply()).toBe(3114543);
   });
 
-  test('it does not create multiple contracts when getting all token data', async () => {
-    const token = subject();
+  test('it creates a single token contract when getting token data', async () => {
+    const address = '0x0D1C97113D70E4D04345D55807CB19C648E17FBA';
+    const token = subject(address);
 
     await token.getName();
     await token.getSymbol();
     await token.getCap();
     await token.getTotalSupply();
 
-    expect(provider.Contract).toHaveBeenCalledTimes(1);
+    expect(contractProvider.getContract).toHaveBeenCalledTimes(1);
+    expect(contractProvider.getContract).toHaveBeenCalledWith(ContractType.HolonToken, address);
   });
 });
