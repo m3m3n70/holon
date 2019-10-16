@@ -10,11 +10,11 @@
     "test:unit:watch": "jest -c jest.config.js --watch",
     "test:integration": "jest -c jest.integration.config.js",
     "build": "rimraf dist && tsc",
-    "lint": "tslint --project tsconfig.json"
+    "lint": "tslint --project tsconfig.json",
+    "prepublishOnly": "npm run build"
   },
   "author": "neo.wilder",
   "license": "ISC",
-  "repository": "git://github.com/m3m3n70/holon.git",
   "dependencies": {
     "rimraf": "^3.0.0",
     "web3": "^1.2.1"
@@ -26,7 +26,13 @@
     "tslint": "^5.20.0",
     "typescript": "^3.6.3"
   },
+  "repository": "git://github.com/m3m3n70/holon.git",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
   "files": [
-    "dist/**"
+    "dist/abi/**",
+    "dist/class/**",
+    "dist/index*.ts"
   ]
 }
