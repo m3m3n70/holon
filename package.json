@@ -1,22 +1,38 @@
 {
-  "name": "holon",
-  "version": "0.0.1",
+  "name": "@m3m3n70/holon",
+  "version": "v0.0.1-alpha",
   "description": "An interface to the Holon Universe",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
-    "test": "jest",
-    "build": "tsc",
-    "prod": "tsc && node ./build/app.js"
+    "test": "npm run test:unit && npm run test:integration",
+    "pretest": "npm run lint",
+    "test:unit": "jest -c jest.config.js",
+    "test:unit:watch": "jest -c jest.config.js --watch",
+    "test:integration": "jest -c jest.integration.config.js",
+    "build": "rimraf dist && tsc",
+    "lint": "tslint --project tsconfig.json",
+    "prepublishOnly": "npm run build"
   },
   "author": "neo.wilder",
   "license": "ISC",
   "dependencies": {
+    "rimraf": "^3.0.0",
     "web3": "^1.2.1"
   },
   "devDependencies": {
     "@types/jest": "^24.0.18",
     "jest": "^24.9.0",
     "ts-jest": "^24.1.0",
+    "tslint": "^5.20.0",
     "typescript": "^3.6.3"
-  }
+  },
+  "repository": "git://github.com/m3m3n70/holon.git",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "files": [
+    "dist/abi/**",
+    "dist/class/**",
+    "dist/index*.ts"
+  ]
 }

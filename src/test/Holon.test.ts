@@ -1,48 +1,85 @@
-import { injectProvider } from "../class/Web3Provider";
-import { Holon } from "../class/Holon";
-import config from "../config/config.json";
+import { Holon } from '../class/Holon';
+import { HolonController } from '../class/HolonController';
 
-expect.extend({
-	toBeType(received, argument) {
-		const initialType = typeof received;
-		const type = initialType === "object" ? Array.isArray(received) ? "array" : initialType : initialType;
-		return type === argument ? {
-			message: () => `expected ${received} to be type ${argument}`,
-			pass: true
-		} : {
-			message: () => `expected ${received} to be type ${argument}`,
-			pass: false
-		};
-	}
-});
+const getHolonName = jest.fn();
+const getHolonAddress = jest.fn();
+const getPrimaryToken = jest.fn();
+const getPrimaryTokenAddress = jest.fn();
 
-describe('Test methods with existing Holon', () => {
-    const provider = injectProvider();
-    const holon = new Holon(provider, config.holonController);
-    
-    test('Holon is initialized with a Provider', async () => {
-        let currentProvider = await holon.getProvider();
-        expect(currentProvider).toHaveProperty("eth");
-    });
-    
-    test('Holon has a Controller Address', () => {
-      holon.initializeExistingHolon();
-      expect(holon.getControllerAddress()).toBeDefined;
-    });
-    
-    test('Holon has a Holon Address', () => {
-        holon.initializeExistingHolon();
-        expect(holon.getHolonAddress()).toBeDefined;
-    });
-    
-    test('Holon has a Primary Token Address', () => {
-        holon.initializeExistingHolon();
-        expect(holon.getPrimaryTokenAddress()).toBeDefined;
-    });
-    
-    test('Holon.getNeurons() returns Array of Neurons', async () => {
-        await holon.initializeExistingHolon();
-        let neuronsArray = holon.getNeurons();
-        expect(Array.isArray(neuronsArray)).toBeDefined;
-    });
+const provider = { getContract: () => undefined };
+
+jest.mock('../class/HolonController', () => ({
+  HolonController: jest.fn().mockImplementation(() => {
+    return { getHolonName, getHolonAddress, getPrimaryToken, getPrimaryTokenAddress };
+  }),
+}));
+
+describe('Holon', () => {
+  const subject = (address: string = '') => {
+    return new Holon(address, provider);
+  };
+
+  beforeEach(() => jest.clearAllMocks());
+
+  test('it gets name from controller', async () => {
+    const name = 'carl';
+    const holon = subject();
+
+    getHolonName.mockResolvedValue(name);
+
+    expect(await holon.getName()).toBe(name);
+  });
+
+  test('it gets address from controller', async () => {
+    const holonAddress = '0x0D1C97113D70E4D04345D55807CB19C648E17FBA';
+
+    const holon = subject();
+
+    getHolonAddress.mockResolvedValue(holonAddress);
+
+    expect(await holon.getAddress()).toBe(holonAddress);
+  });
+
+  test('it creates a single controller when getting name', async () => {
+    const address = '0x0D1C97113D70E4D04345D55807CB19C648E17FBA';
+    const holon = subject(address);
+
+    getHolonName.mockResolvedValue(name);
+
+    await holon.getName();
+    await holon.getName();
+
+    expect(HolonController).toHaveBeenCalledTimes(1);
+    expect(HolonController).toHaveBeenCalledWith(address, provider);
+  });
+
+  test('it gets primary token from controller', async () => {
+    const token = { symbol: 'TOK' };
+    const holon = subject();
+
+    getPrimaryToken.mockResolvedValue(token);
+
+    expect(await holon.getPrimaryToken()).toBe(token);
+  });
+
+  test('it gets primary token address from controller', async () => {
+    const tokenAddress = '0x0D1C97113D70E4D04345D55807CB19C648E17FBA';
+
+    const holon = subject();
+
+    getPrimaryTokenAddress.mockResolvedValue(tokenAddress);
+
+    expect(await holon.getPrimaryTokenAddress()).toBe(tokenAddress);
+  });
+
+  test('it creates a single controller when getting token', async () => {
+    const address = '0x0D1C97113D70E4D04345D55807CB19C648E17FBA';
+    const holon = subject(address);
+
+    await holon.getPrimaryToken();
+    await holon.getPrimaryToken();
+
+    expect(HolonController).toHaveBeenCalledTimes(1);
+    expect(HolonController).toHaveBeenCalledWith(address, provider);
+  });
 });

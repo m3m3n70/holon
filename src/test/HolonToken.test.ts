@@ -1,55 +1,75 @@
-import { HolonToken } from "../class/HolonToken";
-import { injectProvider, Web3Provider } from "../class/Web3Provider";
-import config from "../config/config.json";
+import { HolonToken } from '../class/HolonToken';
+import { ContractProvider, ContractType } from '../class/HolonClient';
 
-//Test InitializeExistigToken
+const mockNameCall = jest.fn();
+const mockCapCall = jest.fn();
+const mockTotalSupplyCall = jest.fn();
+const mockSymbolCall = jest.fn();
 
-const holonToken = new HolonToken(injectProvider);
+const contractProvider: ContractProvider = {
+  getContract: jest.fn().mockImplementation(() => ({
+    methods: {
+      name: () => ({ call: mockNameCall }),
+      symbol: () => ({ call: mockSymbolCall }),
+      cap: () => ({ call: mockCapCall }),
+      totalSupply: () => ({ call: mockTotalSupplyCall }),
+    },
+  })),
+};
 
-test('HolonToken is initialized with a Provider', async () => {
-    await holonToken.initializeExistingToken(config.holonToken);
-    let currentProvider = await holonToken.getProvider();
-    expect(currentProvider).toHaveProperty("eth");
-});
+describe('HolonToken', () => {
+  const subject = (address: string = '') => {
+    return new HolonToken(address, contractProvider);
+  };
 
-test('HolonToken returns address', async () =>  {
-    await holonToken.initializeExistingToken(config.holonToken);
-    let holonTokenAddress = await holonToken.getAddress();
-    expect(holonTokenAddress).toBeDefined();
-});
+  beforeEach(() => jest.clearAllMocks());
 
-test('HolonToken has name', async () =>  {
-    await holonToken.initializeExistingToken(config.holonToken);
-    let holonTokenAddress = await holonToken.getTokenName();
-    expect(holonTokenAddress).toBeDefined;
-});
+  test('it gets name from contract', async () => {
+    const name = 'Infinity';
 
-test('HolonToken has symbol', async () =>  {
-    await holonToken.initializeExistingToken(config.holonToken);
-    let holonTokenSymbol = await holonToken.getTokenSymbol();
-    expect(holonTokenSymbol).toBeDefined;
-});
+    const token = subject();
 
-test('HolonToken has cap', async () =>  {
-    await holonToken.initializeExistingToken(config.holonToken);
-    let holonTokenCap = await holonToken.getTokenCap();
-    expect(holonTokenCap).toBeGreaterThanOrEqual(0);
-});
+    mockNameCall.mockResolvedValue(name);
 
-test('HolonToken has Total Supply', async () =>  {
-    await holonToken.initializeExistingToken(config.holonToken);
-    let totalTokenSupply = await holonToken.getTokenTotalSupply();
-    expect(totalTokenSupply).toBeGreaterThanOrEqual(0);
-});
+    expect(await token.getName()).toBe(name);
+  });
 
-test('HolonToken has an owner', async () =>  {
-    await holonToken.initializeExistingToken(config.holonToken);
-    let owner = await holonToken.getOwner();
-    expect(owner).toBeDefined();
-});
+  test('it gets symbol from contract', async () => {
+    const symbol = 'INF';
 
-test('HolonToken can get balances', async () =>  {
-    await holonToken.initializeExistingToken(config.holonToken);
-    let senderBalance = await holonToken.getBalanceOf(config.sender);
-    expect(senderBalance).toBeGreaterThanOrEqual(0);
+    const token = subject();
+
+    mockSymbolCall.mockResolvedValue(symbol);
+
+    expect(await token.getSymbol()).toBe(symbol);
+  });
+
+  test('it gets cap as number from contract', async () => {
+    const token = subject();
+
+    mockCapCall.mockResolvedValue('31145');
+
+    expect(await token.getCap()).toBe(31145);
+  });
+
+  test('it gets total supply as number from contract', async () => {
+    const token = subject();
+
+    mockTotalSupplyCall.mockResolvedValue('3114543');
+
+    expect(await token.getTotalSupply()).toBe(3114543);
+  });
+
+  test('it creates a single token contract when getting token data', async () => {
+    const address = '0x0D1C97113D70E4D04345D55807CB19C648E17FBA';
+    const token = subject(address);
+
+    await token.getName();
+    await token.getSymbol();
+    await token.getCap();
+    await token.getTotalSupply();
+
+    expect(contractProvider.getContract).toHaveBeenCalledTimes(1);
+    expect(contractProvider.getContract).toHaveBeenCalledWith(ContractType.HolonToken, address);
+  });
 });

@@ -1,8 +1,4 @@
 module.exports = {
-    "roots": [
-      "<rootDir>/src"
-    ],
-    "transform": {
-      "^.+\\.tsx?$": "ts-jest"
-    },
+    "rootDir": "src",
+    "preset": "ts-jest",
 }
